@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\CategorController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,5 +35,25 @@ Route::prefix('admin')->group(function () {
             Route::get('/dashboard','index')->name('admin.dashboard');
             Route::get('/logout','logout')->name('admin.logout');
         });
+        // Categories Route
+        Route::controller(CategorController::class)->group(function(){
+            Route::get('/categories','index')->name('categories.index');
+            Route::get('/categories/create','create')->name('admin.categories');
+            Route::post('/categories','store')->name('categories.store');
+
+
+        });
+
+        //For create slug
+        Route::get('/getSlug',function(Request $request){
+            $slug = '';
+            if(!empty($request->title)){
+                $slug = Str::slug($request->title);
+            }
+            return response()->json([
+                'status'=>true,
+                'slug' => $slug
+            ]);
+        })->name('getSlug');
     });
 });
